@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/javierarce/figma-extractor#readme",
   "dependencies": {
-    "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "figma-js": "^1.10.1",
     "fs": "^0.0.1-security",
