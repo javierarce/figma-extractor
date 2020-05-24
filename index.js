@@ -15,7 +15,9 @@ module.exports = class Extractor {
     })
   }
 
-  extract (path)  {
+  extract (path = '.')  {
+    this.path = path
+
     return new Promise((resolve, reject) => {
       this.client.file(this.fileID).then(({ data }) => {
         let document = data.document
@@ -59,7 +61,7 @@ module.exports = class Extractor {
    return new Promise((resolve, reject) => {
 
      let info = this.frames[id]
-     let path = `${__dirname}/${info.name}.${this.format}`
+     let path = `${this.path}/${info.name}.${this.format}`
 
      let data = ''
 
