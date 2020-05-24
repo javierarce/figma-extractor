@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/javierarce/figma-svg-extractor.git"
+    "url": "git+https://github.com/javierarce/figma-extractor.git"
   },
   "keywords": [
     "figma",
