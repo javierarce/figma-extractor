@@ -1,0 +1,31 @@
+{
+  "name": "figma-extractor",
+  "version": "1.0.0",
+  "description": "Export all the frames of a Figma file",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javierarce/figma-svg-extractor.git"
+  },
+  "keywords": [
+    "figma",
+    "export",
+    "frames",
+    "svg",
+    "jpg",
+    "png"
+  ],
+  "author": "Javier Arce",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/javierarce/figma-extractor/issues"
+  },
+  "homepage": "https://github.com/javierarce/figma-extractor.js#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "figma-js": "^1.10.1",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0"
+  }
+}
