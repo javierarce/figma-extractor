@@ -1,9 +1,17 @@
 # figma-extractor
 
-Export all the frames of a Figma file
+Node package that exports  all the frames of a Figma file to separate files.
 
 
-### How to use it
+## Installation
+
+  `yarn add figma-extractor`
+
+  or
+
+  `npm install figma-extractor`
+
+## Use
 
 ```js
 const Extractor = require('figma-extractor')
