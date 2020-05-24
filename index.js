@@ -4,6 +4,10 @@ const fs = require('fs')
 const https = require('https')
 const Figma = require ('figma-js')
 
+process.on('unhandledRejection', (error) => {
+  console.log(error)
+})
+
 module.exports = class Extractor {
   constructor (personalAccessToken, fileID, format = 'svg') {
     this.fileID = fileID
@@ -35,7 +39,7 @@ module.exports = class Extractor {
           resolve(files)
         })
       }).catch((e) => {
-        reject(e)
+        return reject(e)
       })
     })
   }
@@ -52,7 +56,7 @@ module.exports = class Extractor {
           })
         })
         .catch((e) => {
-          reject(e)
+          return reject(e)
         })
     })
   }
@@ -61,7 +65,8 @@ module.exports = class Extractor {
    return new Promise((resolve, reject) => {
 
      let info = this.frames[id]
-     let path = `${this.path}/${info.name}.${this.format}`
+     let filename = `${info.name}.${this.format}`
+     let path = `${this.path}/${filename}`
 
      let data = ''
 
@@ -74,7 +79,7 @@ module.exports = class Extractor {
          if (e) {
            return reject(e)
          }
-         resolve(path)
+         resolve(filename)
        })
      }
 
@@ -92,11 +97,17 @@ module.exports = class Extractor {
       let promise = new Promise((resolve, reject) => {
         let url = images[id]
 
-        https.get(url, (res) => {
-          this.onGetImage(id, res).then((response) => {
-            resolve(response)
+        try {
+          https.get(url, (res) => {
+            this.onGetImage(id, res).then((response) => {
+              resolve(response)
+            }).catch((e) => {
+              return reject(e)
+            })
           })
-        })
+        } catch (e) {
+          return reject(e)
+        }
       })
       promises.push(promise)
     }

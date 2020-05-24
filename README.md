@@ -19,7 +19,7 @@ const Extractor = require('figma-extractor')
 let extractor = new Extractor(FIGMA_TOKEN, FIGMA_FILE, 'svg')
 
 extractor.extract().then((files) => {
-  console.log(files)
+  console.log(files) // [ 'Frame 1.svg', 'Frame 2.svg' ]
 }).catch((e) => {
   console.error(e)
 })
