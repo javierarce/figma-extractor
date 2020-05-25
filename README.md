@@ -19,8 +19,19 @@ const Extractor = require('figma-extractor')
 let extractor = new Extractor(FIGMA_TOKEN, FIGMA_FILE, 'svg')
 
 extractor.extract().then((files) => {
-  console.log(files) // [ 'Frame 1.svg', 'Frame 2.svg' ]
+  console.log(files) 
 }).catch((e) => {
   console.error(e)
 })
+```
+
+### Result
+
+```js
+[
+  { "filename": "Frame 1.svg", "page":"Page 1" },
+  { "filename": "Frame 2.svg", "page":"Page 1" }, 
+  { "filename": "Frame 3.svg", "page":"Page 1" }, 
+  { "filename": "Frame 4.svg", "page":"Page 2" }
+]
 ```
