@@ -30,7 +30,7 @@ module.exports = class Extractor {
 
         pages.forEach((page) => {
           ids.push(...page.children.map(frame => {
-            this.frames[frame.id] = frame
+            this.frames[frame.id] = { frame, page }
             return frame.id
           }))
         })
@@ -65,7 +65,7 @@ module.exports = class Extractor {
    return new Promise((resolve, reject) => {
 
      let info = this.frames[id]
-     let filename = `${info.name}.${this.format}`
+     let filename = `${info.frame.name}.${this.format}`
      let path = `${this.path}/${filename}`
 
      let data = ''
@@ -79,7 +79,8 @@ module.exports = class Extractor {
          if (e) {
            return reject(e)
          }
-         resolve(filename)
+         let page = this.frames[id].page.name
+         resolve({ filename, page })
        })
      }
 
