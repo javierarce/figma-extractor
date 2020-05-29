@@ -4,14 +4,18 @@ const fs = require('fs')
 const https = require('https')
 const Figma = require ('figma-js')
 
+const DEFAULT_FILE_FORMAT = 'svg'
+
 process.on('unhandledRejection', (error) => {
   console.log(error)
 })
 
 module.exports = class Extractor {
-  constructor (personalAccessToken, fileID, format = 'svg') {
+  constructor (personalAccessToken, fileID, options) {
+    let format = options && options.format || DEFAULT_FILE_FORMAT
+
     this.fileID = fileID
-    this.format = format
+    this.options = { format, ...options}
     this.frames = {}
 
     this.client = Figma.Client({
@@ -46,8 +50,9 @@ module.exports = class Extractor {
 
   getFilesByIds (ids) {
     return new Promise((resolve, reject) => {
-      let format = this.format
-      let opts = { format, ids, svg_include_id: true }
+      let format = this.options.format
+      let options = this.options
+      let opts = { format, ids, ...options }
 
       this.client.fileImages(this.fileID, opts)
         .then((fileImages) => {
@@ -65,7 +70,8 @@ module.exports = class Extractor {
    return new Promise((resolve, reject) => {
 
      let info = this.frames[id]
-     let filename = `${info.frame.name}.${this.format}`
+     let frameName = info.frame.name
+     let filename = `${frameName}.${this.options.format}`
      let path = `${this.path}/${filename}`
 
      let data = ''
@@ -75,10 +81,19 @@ module.exports = class Extractor {
      }
 
      const saveFile = () => {
+
+       let counter = 1
+       while (fs.existsSync(path)) {
+         filename = `${frameName}_${counter}.${this.options.format}`
+         path = `${this.path}/${filename}`
+         counter++
+       }
+
        fs.writeFile(path, data, 'binary', (e) => {
          if (e) {
            return reject(e)
          }
+
          let page = this.frames[id].page.name
          resolve({ filename, page })
        })
