@@ -43,7 +43,12 @@ By default Figma Extractor will export SVG files to the current directory.
 ```js
 const Extractor = require('figma-extractor')
 
-let options = { format: 'svg', svg_include_id: true }
+let options = { 
+  format: 'svg',
+  svg_include_id: true,
+  append_frame_id: true, // appends the frame id to the filename
+  dont_overwrite: true //  don't overwrite existing files with the same name
+}
 let destination = 'my_beautiful_designs'
 
 let extractor = new Extractor(FIGMA_TOKEN, FIGMA_FILE, options)

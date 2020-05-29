@@ -70,8 +70,15 @@ module.exports = class Extractor {
    return new Promise((resolve, reject) => {
 
      let info = this.frames[id]
+     let frameID = info.frame.id.replace(':', '_')
      let frameName = info.frame.name
+
+     if (this.options.append_frame_id) {
+       frameName = `${info.frame.name}_${frameID}`
+     }
+
      let filename = `${frameName}.${this.options.format}`
+
      let path = `${this.path}/${filename}`
 
      let data = ''
@@ -82,11 +89,14 @@ module.exports = class Extractor {
 
      const saveFile = () => {
 
-       let counter = 1
-       while (fs.existsSync(path)) {
-         filename = `${frameName}_${counter}.${this.options.format}`
-         path = `${this.path}/${filename}`
-         counter++
+       if (this.options.dont_overwrite) {
+         let counter = 1
+
+         while (fs.existsSync(path)) {
+           filename = `${frameName}_(${counter}).${this.options.format}`
+           path = `${this.path}/${filename}`
+           counter++
+         }
        }
 
        fs.writeFile(path, data, 'binary', (e) => {
