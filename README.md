@@ -27,7 +27,7 @@ extractor.extract().then((files) => {
 
 ### Result
 
-By default Figma Extractor will export SVG files to the current directory.
+By default Figma Extractor will export SVG files to the current directory. The `extract` command will return the list of exported files in this format:
 
 ```js
 [
