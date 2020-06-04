@@ -1,6 +1,6 @@
 # figma-extractor
 
-Node package that exports  all the frames of a Figma file to separate files.
+Node package that exports  all the frames of a Figma file to different files.
 
 
 ## Installation
@@ -11,7 +11,7 @@ Node package that exports  all the frames of a Figma file to separate files.
 
   `npm install figma-extractor`
 
-## Use
+## How to use it
 
 ```js
 const Extractor = require('figma-extractor')
@@ -38,17 +38,19 @@ By default Figma Extractor will export SVG files to the current directory.
 ]
 ```
 
-## Advanced use
+## Customizing the export
 
 ```js
 const Extractor = require('figma-extractor')
 
 let options = { 
-  format: 'svg',
-  svg_include_id: true,
+  format: 'svg',         // file type (from the Figma API)
+  svg_include_id: true,  // from the Figma API
+  ..
   append_frame_id: true, // appends the frame id to the filename
-  dont_overwrite: true //  don't overwrite existing files with the same name
+  dont_overwrite: true   // don't overwrite existing files with the same name
 }
+
 let destination = 'my_beautiful_designs'
 
 let extractor = new Extractor(FIGMA_TOKEN, FIGMA_FILE, options)
