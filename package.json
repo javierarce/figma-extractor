@@ -3,6 +3,7 @@
   "version": "3.0.1",
   "description": "Export all the frames of a Figma file",
   "main": "index.js",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/javierarce/figma-extractor.git"
