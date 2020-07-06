@@ -47,6 +47,7 @@ let options = {
   format: 'svg',         // file type (from the Figma API)
   svg_include_id: true,  // from the Figma API
   ..
+  pageID: '123:0',       // specify a page
   append_frame_id: true, // appends the frame id to the filename
   dont_overwrite: true   // don't overwrite existing files with the same name
 }

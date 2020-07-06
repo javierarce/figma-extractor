@@ -15,6 +15,7 @@ module.exports = class Extractor {
     let format = options && options.format || DEFAULT_FILE_FORMAT
 
     this.fileID = fileID
+    this.pageID = options.pageID
     this.options = { format, ...options}
     this.frames = {}
 
@@ -32,6 +33,12 @@ module.exports = class Extractor {
         let pages = document.children
         let ids = []
 
+        if (this.pageID) {
+          pages = pages.filter((page) => {
+            return page.id === this.pageID
+          })
+        }
+
         pages.forEach((page) => {
           ids.push(...page.children.map(frame => {
             this.frames[frame.id] = { frame, page }
@@ -39,9 +46,13 @@ module.exports = class Extractor {
           }))
         })
 
-        this.getFilesByIds(ids).then((files) => {
-          resolve(files)
-        })
+        if (ids && ids.length) {
+          this.getFilesByIds(ids).then((files) => {
+            resolve(files)
+          })
+        } else {
+          resolve([])
+        }
       }).catch((e) => {
         return reject(e)
       })
@@ -52,9 +63,8 @@ module.exports = class Extractor {
     return new Promise((resolve, reject) => {
       let format = this.options.format
       let options = this.options
-      let opts = { format, ids, ...options }
 
-      this.client.fileImages(this.fileID, opts)
+      this.client.fileImages(this.fileID, { format, ids, ...options })
         .then((fileImages) => {
           this.onGetFileImages(fileImages).then((response) => {
             resolve(response)
