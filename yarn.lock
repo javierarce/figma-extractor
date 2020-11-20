@@ -15,13 +15,12 @@ array-flatten@1.1.1:
   resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-1.1.1.tgz#9a5f699051b1e7073328f2a008968b64ea2955d2"
   integrity sha1-ml9pkFGx5wczKPKgCJaLZOopVdI=
 
-axios@^0.18.0:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
-  integrity sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
+axios@^0.19.0:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   dependencies:
     follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
 
 body-parser@1.19.0:
   version "1.19.0"
@@ -146,12 +145,12 @@ express@^4.17.1:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-figma-js@^1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/figma-js/-/figma-js-1.10.1.tgz#6560ea7234df28f54e4fa2cbf910a767de49e68f"
-  integrity sha512-CCVLnJLJaFZVeFLDTTab99yCkRNhKnRD6Kh3lwmWzvL4UF5VdwwfhrV9PC0TS1O3CU4zGea7NGsFvJFQexPwOw==
+figma-js@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/figma-js/-/figma-js-1.13.0.tgz#0656b99875c8c0cd2b9a5cb8a1c031d14ebc6f4e"
+  integrity sha512-YBYxKHzZ3vfjxU2RldJ6ZWGaXGrXlqwef7lKgpDIIMr2dAG4xNkwLj31UiQhw1kzdkABhxiDJBJgVGMKwEogfA==
   dependencies:
-    axios "^0.18.0"
+    axios "^0.19.0"
 
 finalhandler@~1.1.2:
   version "1.1.2"
@@ -236,11 +235,6 @@ ipaddr.js@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
   integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
-
-is-buffer@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.4.tgz#3e572f23c8411a5cfd9557c849e3665e0b290623"
-  integrity sha512-Kq1rokWXOPXWuaMAqZiJW4XxsmD9zGx9q4aePabbn3qCRGedtH7Cm+zV8WETitMfu1wdh+Rvd6w5egwSngUX2A==
 
 media-typer@0.3.0:
   version "0.3.0"

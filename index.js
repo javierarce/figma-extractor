@@ -133,6 +133,10 @@ module.exports = class Extractor {
       let promise = new Promise((resolve, reject) => {
         let url = images[id]
 
+        if (!url) {
+          return
+        }
+
         try {
           https.get(url, (res) => {
             this.onGetImage(id, res).then((response) => {
