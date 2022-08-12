@@ -3,6 +3,7 @@
 const fs = require('fs')
 const https = require('https')
 const Figma = require ('figma-js')
+const getDirName = require('path').dirname
 
 const DEFAULT_FILE_FORMAT = 'svg'
 
@@ -15,7 +16,7 @@ module.exports = class Extractor {
     let format = options && options.format || DEFAULT_FILE_FORMAT
 
     this.fileID = fileID
-    this.pageID = options.pageID
+    this.pageID = options && options.pageID
     this.options = { format, ...options}
     this.frames = {}
 

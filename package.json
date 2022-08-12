@@ -1,10 +1,10 @@
 {
   "name": "@javierarce/figma-extractor",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Export all the frames of a Figma file",
   "main": "index.js",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/@javierarce/figma-extractor"
   },
   "repository": {
     "type": "git",
