@@ -1,6 +1,6 @@
 {
   "name": "@javierarce/figma-extractor",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Export all the frames of a Figma file",
   "main": "index.js",
   "publishConfig": {
