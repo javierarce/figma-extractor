@@ -4,7 +4,7 @@
   "description": "Export all the frames of a Figma file",
   "main": "index.js",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/@javierarce/figma-extractor"
+    "registry": "https://registry.npmjs.org/@javier"
   },
   "repository": {
     "type": "git",
