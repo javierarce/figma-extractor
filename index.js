@@ -107,7 +107,7 @@ module.exports = class Extractor {
 
           while (fs.existsSync(path)) {
             filename = `${name}_(${counter}).${this.options.format}`
-            path = `${this.path}/${filename}`
+            path = [this.path, folder, filename].filter(n => n).join('/')
             counter++
           }
         }
