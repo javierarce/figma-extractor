@@ -27,17 +27,17 @@ module.exports = class Extractor {
 
   async getDocumentIds ({ data }) {
     return new Promise((resolve, reject) => {
-      let document = data.document
-      let pages = document.children
-      let ids = []
+      this.pages = data.document.children
 
       if (this.pageID) {
-        pages = pages.filter((page) => {
+        this.pages = this.pages.filter((page) => {
           return page.id === this.pageID
         })
       }
 
-      pages.forEach((page) => {
+      let ids = []
+
+      this.pages.forEach((page) => {
         ids.push(...page.children.map(frame => {
           this.frames[frame.id] = { frame, page }
           return frame.id
@@ -59,9 +59,55 @@ module.exports = class Extractor {
       .then(this.getDocumentIds.bind(this))
       .then(this.getFilesByIds.bind(this))
       .then(this.downloadFileImages.bind(this))
+      .then(this.getComments.bind(this))
       .catch((e) => {
         console.log(e)
       })
+  }
+
+  getComments (data) {
+    return new Promise(async(resolve) => {
+
+      if (!this.options.get_comments) {
+        return resolve(data)
+      }
+
+      let pages = this.pages.map((page) => {
+        return { id: page.id, frames: page.children.map(c => c.id) }
+      })
+      
+      this.client.comments(this.fileID).then((response) => {
+        let comments = []
+
+        response.data.comments.forEach((comment) => {
+          let frameId = comment.client_meta ? comment.client_meta.node_id : undefined 
+
+          let id = undefined
+
+          pages.forEach((page) => {
+              if (page.frames.includes(frameId)) {
+                id = page.id
+              }
+          })
+
+          if (!comment.resolved_at) {
+            if (comments[id]) {
+              comments[id].push(comment.message)
+            }  else {
+              comments[id] = [ comment.message ]
+            }
+          }
+        })
+
+        data.forEach((file) => {
+          if (comments[file.id]) {
+            file.comment = comments[file.id]
+          }
+        })
+
+        resolve(data)
+      })
+    })
   }
 
   async getFilesByIds (ids) {
@@ -70,69 +116,71 @@ module.exports = class Extractor {
     return this.client.fileImages(this.fileID, { format, ids, ...options })
   }
 
+  getImageSavePath(id) {
+    let info = this.frames[id]
+    let frameID = info.frame.id.replace(':', '_')
+
+    let name = info.frame.name
+    let filename = `${name}.${this.options.format}`
+
+    let pageName = this.options.append_page_name ? info.page.name : undefined
+    let frameName = this.options.append_frame_id ? info.frame.name : undefined
+    let folder = this.options.use_pages_as_folders ? info.page.name : undefined
+
+    name = [pageName, frameName, frameID].filter(n => n).join('_')
+
+    let path = [this.path, folder, filename].filter(n => n).join('/')
+
+    if (this.options.dont_overwrite) {
+      let counter = 1
+
+      while (fs.existsSync(path)) {
+        filename = `${name}_(${counter}).${this.options.format}`
+        path = `${this.path}/${filename}`
+        counter++
+      }
+    }
+
+    return { filename, path }
+  }
+
   onGetImage (id, res) {
     return new Promise((resolve, reject) => {
 
-      let info = this.frames[id]
-      let frameID = info.frame.id.replace(':', '_')
-      let name = info.frame.name
-      let pageName = undefined
-      let frameName = undefined
-
-      if (this.options.append_page_name) {
-        pageName = info.page.name
-      }
-
-      if (this.options.append_frame_id) {
-        frameName = info.frame.name
-      }
-
-      name = [pageName, frameName, frameID].filter(n => n).join('_')
-
-      let filename = `${name}.${this.options.format}`
-
-      let folder = this.options.use_pages_as_folders ? info.page.name : undefined
-      let path = [this.path, folder, filename].filter(n => n).join('/')
-
       let data = ''
 
-      const addChunk = (chunk) => {
+      res.setEncoding('binary')
+
+      res.on('data', (chunk) => {
         data += chunk
-      }
+      })
 
-      const saveFile = () => {
+      res.on('end', () => { 
+        this.saveFile(id, data).then((response) => {
+          resolve(response)
+        })
+      })
+    })
+  }
 
-        if (this.options.dont_overwrite) {
-          let counter = 1
+  saveFile (id, data) {
+    return new Promise((resolve, reject) => {
+      let savePath = this.getImageSavePath(id)
 
-          while (fs.existsSync(path)) {
-            filename = `${name}_(${counter}).${this.options.format}`
-            path = [this.path, folder, filename].filter(n => n).join('/')
-            counter++
-          }
+      fs.mkdir(getDirName(savePath.path), { recursive: true}, (error) => {
+        if (error) {
+          return reject(error)
         }
 
-        fs.mkdir(getDirName(path), { recursive: true}, (error) => {
-          if (error) {
-            return reject(error)
+        fs.writeFile(savePath.path, data, 'binary', (e) => {
+          if (e) {
+            return reject(e)
           }
 
-          fs.writeFile(path, data, 'binary', (e) => {
-            if (e) {
-              console.log('error')
-              return reject(e)
-            }
-
-            let page = this.frames[id].page.name
-            resolve({ filename, page })
-          })
+          let page = this.frames[id].page
+          resolve({ filename: savePath.filename, id: page.id, page: page.name })
         })
-      }
-
-
-      res.setEncoding('binary')
-      res.on('data', addChunk)
-      res.on('end', saveFile)
+      })
     })
   }
 

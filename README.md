@@ -31,10 +31,10 @@ By default Figma Extractor will export SVG files to the current directory. The `
 
 ```js
 [
-  { "filename": "Frame 1.svg", "page":"Page 1" },
-  { "filename": "Frame 2.svg", "page":"Page 1" }, 
-  { "filename": "Frame 3.svg", "page":"Page 1" }, 
-  { "filename": "Frame 4.svg", "page":"Page 2" }
+  { "filename": "Frame 1.svg", "id": "4:3", "page":"Page 1" },
+  { "filename": "Frame 2.svg", "id": "4:3", "page":"Page 1" }, 
+  { "filename": "Frame 3.svg", "id": "4:3", "page":"Page 1" }, 
+  { "filename": "Frame 4.svg", "id": "8:4", "page":"Page 2" }
 ]
 ```
 
@@ -52,6 +52,7 @@ let options = {
   append_page_name: true, // appends the page name to the filename
   use_pages_as_folders: true, // create subdirectories with the name of the page
   dont_overwrite: true   // don't overwrite existing files with the same name
+  get_comments: true     // get unresolved comments
 }
 
 const extractor = new Extractor(FIGMA_TOKEN, FIGMA_FILE, OPTIONS)
