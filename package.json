@@ -1,6 +1,6 @@
 {
   "name": "figma-extractor",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "description": "Export the frames of a Figma file",
   "main": "index.js",
   "repository": {

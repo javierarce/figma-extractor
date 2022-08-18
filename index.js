@@ -100,8 +100,8 @@ module.exports = class Extractor {
         })
 
         data.forEach((file) => {
-          if (comments[file.id]) {
-            file.comment = comments[file.id]
+          if (comments[file.page_id]) {
+            file.comments = comments[file.page_id]
           }
         })
 
@@ -178,7 +178,7 @@ module.exports = class Extractor {
           }
 
           let page = this.frames[id].page
-          resolve({ filename: savePath.filename, id: page.id, page: page.name })
+          resolve({ filename: savePath.filename, page_id: page.id, page: page.name })
         })
       })
     })
