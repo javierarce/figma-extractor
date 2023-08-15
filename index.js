@@ -39,7 +39,14 @@ module.exports = class Extractor {
 
       this.pages.forEach((page) => {
         ids.push(...page.children.map(frame => {
-          this.frames[frame.id] = { frame, page }
+
+          if (this.options.get_background_color) {
+            const backgroundColor = this.rgbToHex(page.backgroundColor)
+            this.frames[frame.id] = { frame, page, backgroundColor }
+          } else {
+            this.frames[frame.id] = { frame, page }
+          }
+
           return frame.id
         }))
       })
@@ -178,7 +185,20 @@ module.exports = class Extractor {
           }
 
           let page = this.frames[id].page
-          resolve({ filename: savePath.filename, page_id: page.id, page: page.name })
+
+          const result = {
+            filename: savePath.filename,
+            page_id: page.id,
+            page: page.name
+          }
+
+          const backgroundColor = this.frames[id].backgroundColor
+
+          if (backgroundColor) {
+            result.background_color = backgroundColor
+          }
+
+          resolve(result)
         })
       })
     })
