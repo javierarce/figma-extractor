@@ -232,4 +232,11 @@ module.exports = class Extractor {
       }
     })
   }
+
+  rgbToHex(color) {
+    return '#' + [color.r, color.g, color.b].map(x => {
+      const hex = Math.round(x * 255).toString(16);
+      return hex.length === 1 ? '0' + hex : hex;
+    }).join('');
+  }
 }
