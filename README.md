@@ -44,16 +44,15 @@ By default Figma Extractor will export SVG files to the current directory. The `
 const Extractor = require('figma-extractor')
 
 let options = { 
-  format: 'svg',         // file type (from the Figma API)
-  svg_include_id: true,  // from the Figma API
-  ..
-  pageID: '123:0', // specify a page
-  append_frame_id: true, // appends the frame id to the filename
-  append_page_name: true, // appends the page name to the filename
-  use_pages_as_folders: true, // create subdirectories with the name of the page
-  dont_overwrite: true, // don't overwrite existing files with the same name
-  get_background_color: false, // get the background color of the page in hexidecimal format
-  get_comments: true // get unresolved comments
+  format: 'svg',                // file type (from the Figma API)
+  svg_include_id: true,         // from the Figma API
+  pageID: '123:0',              // specify a page
+  append_frame_id: true,        // appends the frame id to the filename
+  append_page_name: true,       // appends the page name to the filename
+  use_pages_as_folders: true,   // create subdirectories with the name of the page
+  dont_overwrite: true,         // don't overwrite existing files with the same name
+  get_background_color: false,  // get the background color of the page in hexidecimal format
+  get_comments: true            // get unresolved comments
 }
 
 const extractor = new Extractor(FIGMA_TOKEN, FIGMA_FILE, OPTIONS)
