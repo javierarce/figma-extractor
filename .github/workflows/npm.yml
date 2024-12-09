@@ -7,12 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
+          node-version: "14.x"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm cache clean --force # Add this line
+      - run: rm -rf node_modules package-lock.json # And this line
+      - run: npm install # Change from npm ci to npm install
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
