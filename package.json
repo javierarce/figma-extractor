@@ -25,7 +25,6 @@
     "express": "^4.17.1",
     "figma-js": "^1.13.0",
     "fs": "^0.0.1-security",
-    "https": "^1.0.0",
-    "jsum": "^2.0.0-alpha.4"
+    "https": "^1.0.0"
   }
 }
