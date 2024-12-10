@@ -115,7 +115,12 @@ module.exports = class Extractor {
 
           for (let frameId in this.frames) {
             const frame = this.frames[frameId].frame;
-            if (file.filename.startsWith(frame.name)) {
+            const framePage = this.frames[frameId].page;
+
+            if (
+              framePage.id === file.page_id &&
+              frame.name + ".svg" === file.filename
+            ) {
               if (frameComments[frameId]) {
                 fileComments = [...fileComments, ...frameComments[frameId]];
               }
