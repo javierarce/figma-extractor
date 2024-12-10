@@ -26,7 +26,7 @@ module.exports = class Extractor {
   }
 
   async getDocumentIds({ data }) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.pages = data.document.children;
 
       if (this.pageID) {
@@ -89,9 +89,28 @@ module.exports = class Extractor {
         });
 
         response.data.comments.forEach((comment) => {
-          if (!comment.resolved_at && comment.client_meta) {
-            const nodeId = comment.client_meta.node_id;
+          if (comment.resolved_at) return;
 
+          if (comment.parent_id) {
+            const parentComment = response.data.comments.find(
+              (c) => c.id === comment.parent_id,
+            );
+            if (parentComment && parentComment.client_meta) {
+              const nodeId = parentComment.client_meta.node_id;
+              if (this.pages.some((page) => page.id === nodeId)) {
+                pageComments[nodeId].push(comment.message);
+              } else {
+                if (!frameComments[nodeId]) {
+                  frameComments[nodeId] = [];
+                }
+                frameComments[nodeId].push(comment.message);
+              }
+            }
+            return;
+          }
+
+          if (comment.client_meta) {
+            const nodeId = comment.client_meta.node_id;
             if (this.pages.some((page) => page.id === nodeId)) {
               pageComments[nodeId].push(comment.message);
             } else {
@@ -106,10 +125,7 @@ module.exports = class Extractor {
         data.forEach((file) => {
           let fileComments = [];
 
-          if (
-            pageComments[file.page_id] &&
-            pageComments[file.page_id].length > 0
-          ) {
+          if (pageComments[file.page_id]?.length > 0) {
             fileComments = [...pageComments[file.page_id]];
           }
 
@@ -173,7 +189,7 @@ module.exports = class Extractor {
   }
 
   onGetImage(id, res) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       let data = "";
 
       res.setEncoding("binary");
