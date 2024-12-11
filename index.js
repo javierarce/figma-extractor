@@ -84,13 +84,16 @@ module.exports = class Extractor {
         let frameComments = {};
         let pageComments = {};
 
+        // Initialize page comments
         this.pages.forEach((page) => {
           pageComments[page.id] = [];
         });
 
+        // First pass: organize parent comments
         response.data.comments.forEach((comment) => {
           if (comment.resolved_at) return;
 
+          // If it's a reply (has parent_id), find the parent's nodeId
           if (comment.parent_id) {
             const parentComment = response.data.comments.find(
               (c) => c.id === comment.parent_id,
@@ -98,37 +101,57 @@ module.exports = class Extractor {
             if (parentComment && parentComment.client_meta) {
               const nodeId = parentComment.client_meta.node_id;
               if (this.pages.some((page) => page.id === nodeId)) {
-                pageComments[nodeId].push(comment.message);
+                pageComments[nodeId].push({
+                  message: comment.message,
+                  user: comment.user.handle,
+                  created_at: comment.created_at,
+                });
               } else {
                 if (!frameComments[nodeId]) {
                   frameComments[nodeId] = [];
                 }
-                frameComments[nodeId].push(comment.message);
+                frameComments[nodeId].push({
+                  message: comment.message,
+                  user: comment.user.handle,
+                  created_at: comment.created_at,
+                });
               }
             }
             return;
           }
 
+          // Process parent comments with client_meta
           if (comment.client_meta) {
             const nodeId = comment.client_meta.node_id;
             if (this.pages.some((page) => page.id === nodeId)) {
-              pageComments[nodeId].push(comment.message);
+              pageComments[nodeId].push({
+                message: comment.message,
+                user: comment.user.handle,
+                created_at: comment.created_at,
+              });
             } else {
               if (!frameComments[nodeId]) {
                 frameComments[nodeId] = [];
               }
-              frameComments[nodeId].push(comment.message);
+              frameComments[nodeId].push({
+                message: comment.message,
+                user: comment.user.handle,
+                created_at: comment.created_at,
+              });
             }
           }
         });
 
+        // Attach comments to files
         data.forEach((file) => {
           let fileComments = [];
 
+          // Add page comments if they exist
           if (pageComments[file.page_id]?.length > 0) {
             fileComments = [...pageComments[file.page_id]];
           }
 
+          // Add frame comments if they exist
           for (let frameId in this.frames) {
             const frame = this.frames[frameId].frame;
             const framePage = this.frames[frameId].page;
@@ -138,12 +161,16 @@ module.exports = class Extractor {
               frame.name + ".svg" === file.filename
             ) {
               if (frameComments[frameId]) {
-                fileComments = [...fileComments, ...frameComments[frameId]];
+                fileComments = [
+                  ...fileComments,
+                  ...frameComments[frameId],
+                ].reverse();
               }
               break;
             }
           }
 
+          // Only add comments property if there are comments
           if (fileComments.length > 0) {
             file.comments = fileComments;
           }
